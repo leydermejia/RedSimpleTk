@@ -1,0 +1,192 @@
+from tkinter import *
+from tkinter import ttk
+from random import choice
+from numpy import exp, array, random, dot
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.figure import Figure
+
+class RedNeuronal():
+    def __init__(self, activacion):
+        self.pesos_signaticos = 2 * random.random((3,1)) - 1
+        self.errores=list()
+        
+        if activacion == 'Sigmoide':
+            self.activacion = self.sigmoide
+            self.activacion_prima = self.sigmoide_derivado
+        elif activacion == 'Tangente':
+            self.activacion = self.tanh
+            self.activacion_prima = self.tanh_derivada
+    
+    def sigmoide(self, x):
+        return 1 / (1 + exp(-x))
+    
+    def sigmoide_derivado(self, x):
+        return x * (1 - x)
+    
+    def tanh(x,P):
+        x = np.hstack((np.ones((1,1)),x))
+        u = x.dot(P)
+        for i in range(u.shape[1]):
+            pass
+        return u
+
+    def  tanh_derivada ( x ):
+        return 1  - x ** 2
+
+    def entrenamiento(self,entradas,salidas,numero_iteraciones):
+        for i in range(numero_iteraciones):
+            salida = self.pensar(entradas)
+            error = salidas - salida 
+            self.errores.append(error)
+            ajuste = dot(entradas.T, error * self.activacion_prima(salida))
+            self.pesos_signaticos += ajuste
+            
+    def pensar(self,entrada):
+        return self.activacion(dot(entrada, self.pesos_signaticos))
+    
+
+#if __name__ == '__main__':
+    #red_neuronal = RedNeuronal()
+    #entradas = array([[0,0,1], [1,1,1], [1,0,1], [0,1,1]])
+    #salidas = array([[0,1,1,0]]).T
+    #red_neuronal.entrenamiento(entradas,salidas,1000)
+    #print(red_neuronal.pesos_signaticos)
+    #print(red_neuronal.pensar(array([1,0,0])))
+   
+entana = Tk()
+ventana.title(" Inteligencia Artificial ")
+ventana.geometry("700x700")
+notebook = ttk.Notebook(ventana)
+notebook.pack(fill='both',expand='yes')
+
+#nueva pestaña
+pest= ttk.Frame(notebook)
+notebook.add(pest,text=" Red neuronal simple ")
+
+etiqueta_epocas = Label(pest, text="Ingrese las epocas")
+etiqueta_epocas.grid(column=0, row=2)
+
+etiqueta_entrenamiento = Label(pest, text=" Ingrese el set de entrenamiento ")
+etiqueta_entrenamiento.grid(column=0, columnspan=8, row=3, pady=10)
+
+# Captura de datos
+entrada_epocas = Entry(pest, width=20)
+entrada_epocas.grid(column=1, columnspan=3, row=2)
+
+
+#Bahia
+etiqueta_bahia = Label(pest, text="Ingrese bahia ")
+etiqueta_bahia.grid(column=0, row=6, pady=15)
+
+entrada_bahia = Entry(pest, width=20)
+entrada_bahia.grid(column=1, row=6)
+
+
+#Pesos = w
+etiqueta_pesos = Label(pest, text="Ingrese pesos ")
+etiqueta_pesos.grid(column=0, row=7, pady=15)
+
+entrada_pesos = Entry(pest, width=20)
+entrada_pesos.grid(column=1, row=7)
+
+#entradas
+etiqueta_entradas1_set1= Label(pest,text=" Entrada 1 - set 1 ")
+etiqueta_entradas1_set1.grid(column=0, row=8, pady=15)
+
+etiqueta_entradas2_set1= Label(pest,text=" Entrada 2 - set 1 ")
+etiqueta_entradas2_set1.grid(column=0, row=10, pady=15)
+
+etiqueta_entradas1_set2= Label(pest,text=" Entrada 1 - set 2 ")
+etiqueta_entradas1_set2.grid(column=0, row=12, pady=15)
+
+etiqueta_entradas2_set2= Label(pest,text=" Entrada 2 - set 2 ")
+etiqueta_entradas2_set2.grid(column=0, row=14, pady=15)
+
+etiqueta_entradas1_set3= Label(pest,text=" Entrada 1 - set 3 ")
+etiqueta_entradas1_set3.grid(column=0, row=16, pady=15)
+
+etiqueta_entradas2_set3= Label(pest,text=" Entrada 2 - set 3 ")
+etiqueta_entradas2_set3.grid(column=0, row=18, pady=15)
+
+etiqueta_entradas1_set4= Label(pest,text=" Entrada 1 - set 4 ")
+etiqueta_entradas1_set4.grid(column=0, row=20, pady=15)
+
+etiqueta_entradas2_set4= Label(pest,text=" Entrada 2 - set 4 ")
+etiqueta_entradas2_set4.grid(column=0, row=22, pady=15)
+
+#Capturas de datos
+entrada_entradas1_set1= Entry(pest, width=20)
+entrada_entradas1_set1.grid(column=1, row=8)
+
+entrada_entradas2_set1 = Entry(pest, width=20)
+entrada_entradas2_set1.grid(column=1, row=10)
+
+entrada_entradas1_set2= Entry(pest, width=20)
+entrada_entradas1_set2.grid(column=1, row=12)
+
+entrada_entradas2_set2= Entry(pest, width=20)
+entrada_entradas2_set2.grid(column=1, row=14)
+
+entrada_entradas1_set3= Entry(pest, width=20)
+entrada_entradas1_set3.grid(column=1, row=16)
+
+entrada_entradas2_set3= Entry(pest, width=20)
+entrada_entradas2_set3.grid(column=1, row=18)
+
+entrada_entradas1_set4= Entry(pest, width=20)
+entrada_entradas1_set4.grid(column=1, row=20)
+
+entrada_entradas2_set4= Entry(pest, width=20)
+entrada_entradas2_set4.grid(column=1, row=22)
+
+
+#Salidas
+etiqueta_salidas1= Label(pest,text=" Salida ")
+etiqueta_salidas1.grid(column=2, row=8,  padx= 5, pady=10)
+
+etiqueta_salidas2= Label(pest,text=" Salida ")
+etiqueta_salidas2.grid(column=2, row=12, padx= 5, pady=10)
+
+etiqueta_salidas3= Label(pest,text=" Salida ")
+etiqueta_salidas3.grid(column=2, row=16, padx= 5, pady=10)
+
+etiqueta_salidas4= Label(pest,text=" Salida ")
+etiqueta_salidas4.grid(column=2, row=20, padx= 5, pady=10)
+
+
+#Capturas de datos
+entrada_entradas1= Entry(pest, width=20)
+entrada_entradas1.grid(column=3, row=8)
+
+entrada_entradas2= Entry(pest, width=20)
+entrada_entradas2.grid(column=3, row=12)
+
+entrada_entradas3= Entry(pest, width=20)
+entrada_entradas3.grid(column=3, row=16)
+
+entrada_entradas4= Entry(pest, width=20)
+entrada_entradas4.grid(column=3, row=20)
+
+
+#definiendo la funcion
+def hacer_click():
+    red_neuronal = RedNeuronal("Tangente")
+    epocas= entrada_epocas.get()
+    bahia= entrada_bahia.get()
+    pesos= entrada_pesos.get()
+    entradas = array([[int (entrada_entradas1_set1.get()), int(entrada_entradas2_set1.get())], [int (entrada_entradas1_set2.get()), int (entrada_entradas2_set2.get())], [ int (entrada_entradas1_set3.get()), int (entrada_entradas2_set3.get())], [int (entrada_entradas1_set4.get()), int (entrada_entradas2_set4.get())]])
+    salidas = array([(int(entrada_entradas1.get()), int(entrada_entradas2.get()), int(entrada_entradas3.get()), int(entrada_entradas4.get()))]).T
+    red_neuronal.entrenamiento(entradas,salidas,int (epocas))
+    print(red_neuronal.pesos_signaticos)
+    print("errores{}".format(red_neuronal.errores))
+    print(red_neuronal.pensar(array([1,0,0])))
+    plt.plot(errores,'-',color='red')
+    plt.show()
+                    
+#boton
+botonCalcular = Button(pest, text="Calcular!", command=lambda: hacer_click())
+botonCalcular.grid(column=0, columnspan=4, row=24)
+
+ventana.mainloop()
